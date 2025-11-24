@@ -47,9 +47,11 @@ export async function upsertResume(userId: string, body: any) {
 }
 
 export async function tailorResume(userId: string, body: TailorRequest) {
-  const { job_description } = body;
+  const { job_description, company, position } = body;
 
   if (!job_description) throw new Error("Job Description is required");
+  if (!company) throw new Error("Company is required");
+  if (!position) throw new Error("Position is required");
 
   const { data, error } = await supabase
     .from("resumes")
@@ -68,7 +70,21 @@ export async function tailorResume(userId: string, body: TailorRequest) {
   const tailoredResume = await aiService.tailorResume({
     resume_content: resume.content,
     job_description,
+    company,
+    position,
   });
+
+  await supabase
+    .from("resume_optimizations")
+    .insert({
+      user_id: userId,
+      job_data: {
+        job_description,
+        company,
+        position,
+      },
+      optimized_resume: tailoredResume,
+    });
 
   return tailoredResume;
 }

@@ -3,6 +3,8 @@ import { OptimizedResumeContent } from "../interface/resume.ts";
 interface AIRequest {
   resume_content: object;
   job_description: string;
+  position: string;
+  company: string;
 }
 
 interface AIResponse {
@@ -44,6 +46,8 @@ export class AIService {
         },
         body: JSON.stringify({
           resume_content: payload.resume_content,
+          company: payload.company,
+          position: payload.position,
           job_description: payload.job_description,
           model_name: this.modelName,
           max_tokens: this.maxToken,
