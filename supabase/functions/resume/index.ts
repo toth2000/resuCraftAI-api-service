@@ -1,8 +1,14 @@
 import { supabase } from "./supabaseClient.ts";
 import { handleRequest } from "./route.ts";
+import { corsHeaders } from "./constant/cors.ts";
 
 Deno.serve(async (req) => {
   try {
+    // Handle CORS preflight
+    if (req.method === "OPTIONS") {
+      return new Response("ok", { headers: corsHeaders });
+    }
+
     // Extract token
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
