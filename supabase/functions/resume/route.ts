@@ -1,5 +1,12 @@
 import { getResumes, tailorResume, upsertResume } from "./controller.ts";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "https://www.resucraftai.com",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS, DELETE, PUT",
+};
+
 export async function handleRequest(
   req: Request,
   userId: string,
@@ -7,6 +14,11 @@ export async function handleRequest(
   const url = new URL(req.url);
   const pathname = url.pathname;
   const method = req.method;
+
+  // Handle CORS preflight
+  if (method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
 
   // POST /resume
   if (pathname.endsWith("/resume") && method === "POST") {
@@ -34,6 +46,6 @@ export async function handleRequest(
 function jsonResponse(data: unknown, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { "Content-Type": "application/json" },
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 }
