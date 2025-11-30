@@ -1,4 +1,4 @@
-import { getResumes, tailorResume, upsertResume } from "./controller.ts";
+import { extractResume, getResumes, tailorResume, upsertResume } from "./controller.ts";
 import { corsHeaders } from "./constant/cors.ts";
 
 export async function handleRequest(
@@ -22,10 +22,17 @@ export async function handleRequest(
     return jsonResponse(data);
   }
 
-  // GET /tailor
+  // POST /tailor
   if (pathname.endsWith("/tailor") && method === "POST") {
     const body = await req.json();
     const data = await tailorResume(userId, body);
+    return jsonResponse(data);
+  }
+
+  // POST /extract
+  if (pathname.endsWith("/extract") && method === "POST") {
+    const body = await req.json();
+    const data = await extractResume(userId, body);
     return jsonResponse(data);
   }
 

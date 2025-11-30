@@ -3,3 +3,7 @@ export interface TailorRequest {
   position: string
   company: string
 }
+
+export interface ExtractResumeRequest {
+  text: string
+}

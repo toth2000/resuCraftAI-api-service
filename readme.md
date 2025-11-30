@@ -10,7 +10,6 @@
  - Run `npx supabase start`
  - For local mark [analytics] enabled = false in `supabse/config.toml`
  - Check status `npx supabase status`
- - To run functions locally `npx supabase functions serve --all`
  - To stop supabase use `npx supabase stop`
  - Check qemu status using `ps aux | grep qemu` -> copy the output text and paste in editor and check if any qemu process are running, like qemu-system-aarch64 
 <!-- unix:///Users/toth2000/.colima/default/docker.sock -->
@@ -25,6 +24,7 @@
     `supabase functions deploy [FUNCTION_NAME]`
 - Logs
     `supabase functions logs [FUNCTION_NAME]`
+
 ## DB Migration:
     - Create migration file using `npx supabase migration new <migration_name>`
     - Run local migration using `npx supabase migration up`
@@ -33,3 +33,4 @@
 ## Function
     - Delete function using `supabase functions delete <function_name>`
     - Create function using `supabase functions delete <function_name>`
+    - To run functions locally `npx supabase functions serve --all`

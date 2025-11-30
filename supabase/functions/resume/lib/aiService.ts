@@ -1,4 +1,5 @@
-import { OptimizedResumeContent } from "../interface/resume.ts";
+import { ExtractResumeRequest } from "../interface/requests.ts";
+import { ExtractedResumeContent, OptimizedResumeContent } from "../interface/resume.ts";
 
 interface AIRequest {
   resume_content: object;
@@ -63,6 +64,39 @@ export class AIService {
       return data.optimized_sections;
     } catch (err) {
       console.error("AI service failed:", err);
+      throw err;
+    }
+  }
+
+  /**
+   * Call AI service to extract the resume data
+   * @param payload - resume text
+   * @returns Extract resume in structured format
+   */
+  async extractResume(payload: ExtractResumeRequest): Promise<ExtractedResumeContent> {
+    try {
+      const response = await fetch(`${this.apiUrl}/v1/extract`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "API_KEY": this.apiKey,
+        },
+        body: JSON.stringify({
+          text: payload.text,
+          model_name: "gpt-4.1-mini",
+          max_tokens: 1500,
+        }),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`AI service error: ${text}`);
+      }
+
+      const data: ExtractedResumeContent = await response.json();
+      return data.data;
+    } catch (err) {
+      console.error("AI extract service failed:", err);
       throw err;
     }
   }

@@ -8,6 +8,10 @@ export interface OptimizedResumeContent {
   optimized_text: string;
 }
 
+export interface ExtractedResumeContent {
+  data: any;
+}
+
 export interface Resume {
   id: string;
   user_id: string;

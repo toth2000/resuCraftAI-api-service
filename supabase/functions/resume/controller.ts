@@ -1,4 +1,4 @@
-import { TailorRequest } from "./interface/requests.ts";
+import { ExtractResumeRequest, TailorRequest } from "./interface/requests.ts";
 import { Resume } from "./interface/resume.ts";
 import { AIService } from "./lib/aiService.ts";
 import { supabase } from "./supabaseClient.ts";
@@ -87,4 +87,19 @@ export async function tailorResume(userId: string, body: TailorRequest) {
     });
 
   return tailoredResume;
+}
+
+export async function extractResume(
+  userId: string,
+  body: ExtractResumeRequest,
+) {
+  const { text } = body;
+
+  if (!text) throw new Error("Resume text is required");
+
+  const extractedResume = await aiService.extractResume({
+    text,
+  });
+
+  return extractedResume;
 }
